@@ -75,10 +75,10 @@ runs:
           echo "::warning::No configuration found, using Code Climate's default configuration"
         fi
 
-        # files_changed=$(git --no-pager diff master..${GITHUB_REF#refs/heads/} --name-only)
-        # echo "Files Changed"
-        # files_changed="${files_changed//$'\n'/ ./}"
-        # echo $files_changed
+        files_changed=$(git --no-pager diff master..${GITHUB_REF##*/} --name-only)
+        echo "Files Changed"
+        files_changed="${files_changed//$'\n'/ ./}"
+        echo $files_changed
 
         # Run once for JSON output
         echo "#### INITIAL RUN ####"
