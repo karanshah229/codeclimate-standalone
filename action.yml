@@ -75,7 +75,7 @@ runs:
           echo "::warning::No configuration found, using Code Climate's default configuration"
         fi
 
-        files_changed=$(git --no-pager diff master..${GITHUB_HEAD_REF##*/} --name-only)
+        files_changed=$(git --no-pager diff ${GITHUB_REF##*/}..HEAD --name-only)
         echo "Files Changed"
         files_changed="${files_changed//$'\n'/ ./}"
         echo $files_changed
