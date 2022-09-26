@@ -108,8 +108,7 @@ runs:
         echo "::set-output name=critical::$TOTAL_CRITICAL"
         echo "::set-output name=blocker::$TOTAL_BLOCKER"
 
-    Second run purely to get the readable HTML report. The second run is much faster than the first
-    as it does not need to redownload the images already pulled by the first run
+    # Second run purely to get the readable HTML report. The second run is much faster than the first as it does not need to redownload the images already pulled by the first run
     - name: Generate HTML Report
       shell: bash
       env:
