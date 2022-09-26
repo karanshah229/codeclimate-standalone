@@ -75,7 +75,7 @@ runs:
           echo "::warning::No configuration found, using Code Climate's default configuration"
         fi
 
-        files_changed=$(git --no-pager diff master..HEAD --name-only)
+        files_changed=$(git --no-pager diff master --name-only)
         echo "Files Changed"
         files_changed="${files_changed//$'\n'/ ./}"
         echo $files_changed
@@ -87,7 +87,7 @@ runs:
           --volume "$PWD":/code \
           --volume /var/run/docker.sock:/var/run/docker.sock \
           --volume /tmp/cc:/tmp/cc \
-          --entrypoint /bin/sh codeclimate/codeclimate -c "cd /code && /usr/src/app/bin/codeclimate prepare > /dev/null && /usr/src/app/bin/codeclimate analyze $files_changed -f html" > raw.html
+          --entrypoint /bin/sh codeclimate/codeclimate -c "cd /code && /usr/src/app/bin/codeclimate prepare > /dev/null && /usr/src/app/bin/codeclimate analyze $files_changed -f json" > raw.json
 
         # Strip the json to only issues
         jq -c 'map(select(.type | test("issue"; "i")))' raw.json > codeclimate-report.json
