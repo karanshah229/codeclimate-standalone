@@ -134,7 +134,7 @@ runs:
           --volume "$PWD":/code \
           --volume /var/run/docker.sock:/var/run/docker.sock \
           --volume /tmp/cc:/tmp/cc \
-          --entrypoint /bin/sh codeclimate/codeclimate -c "cd /code && /usr/src/app/bin/codeclimate prepare > /dev/null && /usr/src/app/bin/codeclimate analyze $files_changed -f html > codeclimate-report.html
+          --entrypoint /bin/sh codeclimate/codeclimate -c "cd /code && /usr/src/app/bin/codeclimate prepare > /dev/null && /usr/src/app/bin/codeclimate analyze $files_changed -f html" > codeclimate-report.html
         else
           echo "HTML REPORT not requested, skipping..."
         fi
