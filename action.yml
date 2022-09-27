@@ -77,16 +77,8 @@ runs:
 
         git switch $GITHUB_HEAD_REF
         git switch ${GITHUB_REF##*/}
-        echo $(git --no-pager diff --name-only ${GITHUB_REF##*/}..$GITHUB_HEAD_REF)
-
-        echo 'GITHUB_HEAD_REF'
-        echo $GITHUB_HEAD_REF
-        echo 'GITHUB_REF'
-        echo ${GITHUB_REF##*/}
         files_changed=$(git --no-pager diff --name-only $GITHUB_HEAD_REF..${GITHUB_REF##*/})
-        echo "Files Changed"
         files_changed="${files_changed//$'\n'/ ./}"
-        echo $files_changed
 
         # Run once for JSON output
         echo "#### INITIAL RUN ####"
@@ -138,11 +130,11 @@ runs:
           # Run for HTML output
           echo "#### GENERATING HTML VERSION ####"
           docker run \
-            --env CODECLIMATE_CODE="$PWD" \
-            --volume "$PWD":/code \
-            --volume /var/run/docker.sock:/var/run/docker.sock \
-            --volume /tmp/cc:/tmp/cc \
-            codeclimate/codeclimate analyze -f html > codeclimate-report.html
+          --env CODECLIMATE_CODE="$PWD" \
+          --volume "$PWD":/code \
+          --volume /var/run/docker.sock:/var/run/docker.sock \
+          --volume /tmp/cc:/tmp/cc \
+          --entrypoint /bin/sh codeclimate/codeclimate -c "cd /code && /usr/src/app/bin/codeclimate prepare > /dev/null && /usr/src/app/bin/codeclimate analyze $files_changed -f html > codeclimate-report.html
         else
           echo "HTML REPORT not requested, skipping..."
         fi
