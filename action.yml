@@ -61,7 +61,7 @@ runs:
     - name: List all changed files
       shell: bash
       run: |
-        echo "${{ steps.changed-files.outputs.all_changed_files}}"
+        echo $(git diff --name-only rebase-base-feat..rebase-base-master)
         for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
           echo "$file was changed"
         done
