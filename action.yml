@@ -59,10 +59,12 @@ runs:
     - name: List all changed files
       shell: bash
       run: |
-        echo $(git diff --name-only rebase-base-feat..rebase-base-master)
         for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
           echo "$file was changed"
         done
+        git switch rebase-base-feat
+        git switch rebase-base-master
+        echo $(git diff --name-only rebase-base-feat..rebase-base-master)
 
     # Initial Run is performed to get the results in a parseable format
     - name: Code Climate
