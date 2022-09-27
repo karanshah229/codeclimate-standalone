@@ -77,12 +77,12 @@ runs:
 
         git switch $GITHUB_HEAD_REF
         git switch ${GITHUB_REF##*/}
-        echo $(git --no-pager diff --name-only $GITHUB_HEAD_REF..${GITHUB_REF##*/})
+        echo $(git --no-pager diff --name-only ${GITHUB_REF##*/}..$GITHUB_HEAD_REF)
 
         echo 'GITHUB_HEAD_REF'
         echo $GITHUB_HEAD_REF
         echo 'GITHUB_REF'
-        git switch ${GITHUB_REF##*/}
+        echo ${GITHUB_REF##*/}
         files_changed=$(git --no-pager diff --name-only $GITHUB_HEAD_REF..${GITHUB_REF##*/})
         echo "Files Changed"
         files_changed="${files_changed//$'\n'/ ./}"
