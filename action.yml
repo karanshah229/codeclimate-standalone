@@ -55,8 +55,6 @@ runs:
     - name: Get changed files
       id: changed-files
       uses: tj-actions/changed-files@v31
-      with:
-        separator: ' ./'
 
     - name: List all changed files
       shell: bash
