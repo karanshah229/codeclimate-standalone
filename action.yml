@@ -107,6 +107,7 @@ runs:
         echo "::set-output name=major::$TOTAL_MAJOR"
         echo "::set-output name=critical::$TOTAL_CRITICAL"
         echo "::set-output name=blocker::$TOTAL_BLOCKER"
+        echo "::set-output name=files_changed::$files_changed"
 
     # Second run purely to get the readable HTML report. The second run is much faster than the first as it does not need to redownload the images already pulled by the first run
     - name: Generate HTML Report
@@ -134,7 +135,7 @@ runs:
           --volume "$PWD":/code \
           --volume /var/run/docker.sock:/var/run/docker.sock \
           --volume /tmp/cc:/tmp/cc \
-          --entrypoint /bin/sh codeclimate/codeclimate -c "cd /code && /usr/src/app/bin/codeclimate prepare > /dev/null && /usr/src/app/bin/codeclimate analyze $files_changed -f html" > codeclimate-report.html
+          --entrypoint /bin/sh codeclimate/codeclimate -c "cd /code && /usr/src/app/bin/codeclimate prepare > /dev/null && /usr/src/app/bin/codeclimate analyze ${{ steps.cc.outputs.files_changed }} -f html" > codeclimate-report.html
         else
           echo "HTML REPORT not requested, skipping..."
         fi
