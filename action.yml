@@ -160,7 +160,7 @@ runs:
         echo "blocker: ${{ steps.cc.outputs.blocker }} allowed: $CC_BLOCKERS_ALLOWED"
 
         # Pass or Fail the job depending on the findings / inputs
-        if [ ${{ steps.cc.outputs.blocker }} -gt "$CC_BLOCKERS_ALLOWED" ] && [ [ ${{ steps.cc.outputs.critical }} -gt "$CC_CRITICAL_ALLOWED" ] || [ ${{ steps.cc.outputs.major }} -gt "$CC_MAJOR_ALLOWED" ] || [ ${{ steps.cc.outputs.minor }} -gt "$CC_MINOR_ALLOWED" ] || [ ${{ steps.cc.outputs.info }} -gt "$CC_INFO_ALLOWED" ] ]; then
+        if [ ${{ steps.cc.outputs.blocker }} -gt "$CC_BLOCKERS_ALLOWED" ] || [ ${{ steps.cc.outputs.critical }} -gt "$CC_CRITICAL_ALLOWED" ] && [ [ ${{ steps.cc.outputs.major }} -gt "$CC_MAJOR_ALLOWED" ] || [ ${{ steps.cc.outputs.minor }} -gt "$CC_MINOR_ALLOWED" ] || [ ${{ steps.cc.outputs.info }} -gt "$CC_INFO_ALLOWED" ] ]; then
           exit 1
         else
           exit 0
