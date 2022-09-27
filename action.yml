@@ -77,8 +77,7 @@ runs:
 
         echo 'GITHUB_HEAD_REF'
         echo $GITHUB_HEAD_REF
-        echo ${GITHUB_HEAD_REF##*/}
-        files_changed=$(git --no-pager diff ${GITHUB_HEAD_REF##*/}..HEAD --name-only)
+        files_changed=$(git --no-pager diff HEAD..${GITHUB_HEAD_REF} --name-only)
         echo "Files Changed"
         files_changed="${files_changed//$'\n'/ ./}"
         echo $files_changed
