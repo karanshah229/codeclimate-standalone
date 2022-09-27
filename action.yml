@@ -52,20 +52,6 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Get changed files
-      id: changed-files
-      uses: tj-actions/changed-files@v31
-
-    - name: List all changed files
-      shell: bash
-      run: |
-        for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-          echo "$file was changed"
-        done
-        git switch rebase-base-feat
-        git switch rebase-base-master
-        echo $(git diff --name-only rebase-base-feat..rebase-base-master)
-
     # Initial Run is performed to get the results in a parseable format
     - name: Code Climate
       shell: bash
@@ -89,12 +75,18 @@ runs:
           echo "::warning::No configuration found, using Code Climate's default configuration"
         fi
 
-        # echo 'GITHUB_HEAD_REF'
-        # echo $GITHUB_HEAD_REF
-        # files_changed=$(git --no-pager diff HEAD..${GITHUB_HEAD_REF} --name-only)
-        # echo "Files Changed"
-        # files_changed="${files_changed//$'\n'/ ./}"
-        # echo $files_changed
+        git switch $GITHUB_HEAD_REF
+        git switch ${GITHUB_REF##*/}
+        echo $(git --no-pager diff --name-only $GITHUB_HEAD_REF..${GITHUB_REF##*/})
+
+        echo 'GITHUB_HEAD_REF'
+        echo $GITHUB_HEAD_REF
+        echo 'GITHUB_REF'
+        git switch ${GITHUB_REF##*/}
+        files_changed=$(git --no-pager diff --name-only $GITHUB_HEAD_REF..${GITHUB_REF##*/})
+        echo "Files Changed"
+        files_changed="${files_changed//$'\n'/ ./}"
+        echo $files_changed
 
         # Run once for JSON output
         echo "#### INITIAL RUN ####"
