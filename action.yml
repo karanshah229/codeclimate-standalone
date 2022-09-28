@@ -75,16 +75,9 @@ runs:
           echo "::warning::No configuration found, using Code Climate's default configuration"
         fi
 
-        echo $GITHUB_REF
-        echo "GITHUB_REF"
-        echo "GITHUB_REF_NAME"
-        echo $GITHUB_REF_NAME
-        echo "GITHUB_BASE_NAME"
-        echo $GITHUB_BASE_REF
-        
         git switch $GITHUB_HEAD_REF
         git switch $GITHUB_REF_NAME
-        files_changed=$(git --no-pager diff --name-only $GITHUB_HEAD_REF..${GITHUB_REF##*/})
+        files_changed=$(git --no-pager diff --name-only $GITHUB_HEAD_REF..$GITHUB_REF_NAME)
         files_changed="${files_changed//$'\n'/ ./}"
 
         # Run once for JSON output
