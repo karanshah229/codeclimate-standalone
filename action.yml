@@ -33,6 +33,10 @@ inputs:
     description: "The number of findings of this severity allowed before the job returns a failure"
     required: false
     default: "0"
+  exit_on_complete:
+    description: "Return exit code on action completion. Use `false` if you want to perform some custom actions and exit later. (Hint: Use the result output to determine exit code later)"
+    required: false
+    default: "true"
 outputs:
   info_findings:
     description: "The number of findings of severity INFO"
@@ -157,6 +161,7 @@ runs:
         CC_MAJOR_ALLOWED: ${{ inputs.major_threshold }}
         CC_MINOR_ALLOWED: ${{ inputs.minor_threshold }}
         CC_INFO_ALLOWED: ${{ inputs.info_threshold }}
+        EXIT_ON_COMPLETE: ${{ inputs.exit_on_complete }}
       run: |
         # Output in logs
         echo "#### RESULT ####"
@@ -170,6 +175,12 @@ runs:
          # Pass or Fail the job depending on the findings / inputs
         if [ ${{ steps.cc.outputs.blocker }} -gt "$CC_BLOCKERS_ALLOWED" ] || [ ${{ steps.cc.outputs.critical }} -gt "$CC_CRITICAL_ALLOWED" ] || [ ${{ steps.cc.outputs.major }} -gt "$CC_MAJOR_ALLOWED" ]; then
           echo "::set-output name=result::'FAIL'"
+          if [ "$EXIT_ON_COMPLETE" = "true" ]; then
+            exit 1
+          fi
         else
           echo "::set-output name=result::'PASS'"
+          if [ "$EXIT_ON_COMPLETE" = "true" ]; then
+            exit 0
+          fi
         fi
