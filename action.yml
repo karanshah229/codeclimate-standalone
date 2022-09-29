@@ -52,6 +52,10 @@ outputs:
   total_findings:
     description: "The total number of findings"
     value: ${{ steps.cc.outputs.total }}
+  result:
+    description: "Final result of codeclimate based on thresholds"
+    value: ${{ steps.parse_result.outputs.result }}
+
 runs:
   using: "composite"
   steps:
@@ -145,6 +149,7 @@ runs:
 
     # Determine the result
     - name: Parse Result
+      id: parse_result
       shell: bash
       env:
         CC_BLOCKERS_ALLOWED: ${{ inputs.blocker_threshold }}
@@ -164,7 +169,9 @@ runs:
 
          # Pass or Fail the job depending on the findings / inputs
         if [ ${{ steps.cc.outputs.blocker }} -gt "$CC_BLOCKERS_ALLOWED" ] || [ ${{ steps.cc.outputs.critical }} -gt "$CC_CRITICAL_ALLOWED" ] || [ ${{ steps.cc.outputs.major }} -gt "$CC_MAJOR_ALLOWED" ]; then
+          echo "::set-output name=result::FAIL"
           exit 1
         else
+          echo "::set-output name=result::PASS"
           exit 0
         fi
