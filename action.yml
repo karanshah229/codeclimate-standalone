@@ -49,6 +49,9 @@ outputs:
   blocker_findings:
     description: "The number of findings of severity BLOCKER"
     value: ${{ steps.cc.outputs.blocker }}
+  total_findings:
+    description: "The total number of findings"
+    value: ${{ steps.cc.outputs.total }}
 runs:
   using: "composite"
   steps:
